@@ -16,6 +16,7 @@
     <!-- En este elemento podemos agregar información que viene desde Vue con
       las llaves dobles -->
     <!-- {{ text }} -->
+    
   </div>
   <script>
     // Instanciamos una app de Vue con el método createApp en una constante que
@@ -28,7 +29,10 @@
       // información que utilizaremos en nuestra aplicación
       data() {
         return {
-          text: "<span>Hola Vue</span>"
+          // text: "<span>Hola Vue</span>"
+          attr: 'src',
+          alt: 'alt',
+          img: 'https://picsum.photos/200/300'
         };
       },
       // También se pueden crear templates para crear los componentes de forma
@@ -41,7 +45,16 @@
       // contendrá el componente o v-html para cambiar el innerHTML y v-once
       // para indicar que se renderizará de forma estática (no reaccionará a
       // los cambios en sus atributos o variables que maneje)
-      template: `<div v-once v-html="text"></div>`
+      // template: `<div v-once v-html="text"></div>`
+      // También está la directiva v-bind que nos permite transformar los
+      // atributos nativos de un componente en directivas y poder asignarles
+      // los valores de variables si es que no queremos agregar las llaves
+      // dobles. Esto se puede acortar a ':' o incluso se puede utilizar
+      // v-bind como una directiva que obtiene un JSON con los atributos a
+      // ligar y su valor
+      // template: `<img v-bind:src="img" v-bind:alt="img">`
+      // template: `<img :src="img" :alt="img">`
+      template: `<img v-bind:[attr]="img" v-bind:[alt]="img">`
     }).mount("#app");
 
   </script>
