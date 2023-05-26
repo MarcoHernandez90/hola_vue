@@ -30,31 +30,60 @@
       data() {
         return {
           // text: "<span>Hola Vue</span>"
-          attr: 'src',
-          alt: 'alt',
-          img: 'https://picsum.photos/200/300'
+          // attr: 'src',
+          // alt: 'alt',
+          // img: 'https://picsum.photos/500/800',
+          counter: 0
         };
       },
-      // También se pueden crear templates para crear los componentes de forma
-      // declarativa
-      // template: `<div>{{ text }}</div>`
-      // En el caso de los templates se pueden utilizar directivas, que son
-      // atributos que recibe el HTML de un template generalmente llamadas
-      // v-<declarativa> a las cuales se les puede asignar un valor de data:
-      // En este caso podemos utilizar v-text para asignarle el texto que
-      // contendrá el componente o v-html para cambiar el innerHTML y v-once
-      // para indicar que se renderizará de forma estática (no reaccionará a
-      // los cambios en sus atributos o variables que maneje)
-      // template: `<div v-once v-html="text"></div>`
-      // También está la directiva v-bind que nos permite transformar los
-      // atributos nativos de un componente en directivas y poder asignarles
-      // los valores de variables si es que no queremos agregar las llaves
-      // dobles. Esto se puede acortar a ':' o incluso se puede utilizar
-      // v-bind como una directiva que obtiene un JSON con los atributos a
-      // ligar y su valor
-      // template: `<img v-bind:src="img" v-bind:alt="img">`
-      // template: `<img :src="img" :alt="img">`
-      template: `<img v-bind:[attr]="img" v-bind:[alt]="img">`
+      /* Vue no puede recibir en sus directivas funciones que nosotros
+        declaramos en nuestro código de JavaScript, pero lo que si puede
+        hacer es ejecutar métodos que declaramos dentro del atributo methods */
+      methods: {
+        increment() {
+          this.counter++;
+        },
+        decrement() {
+          this.counter--;
+        },
+        /* submit(e) {
+          // e.preventDefault();
+          this.counter++;
+        } */
+      },
+      /* También se pueden crear templates para crear los componentes de forma
+        declarativa:
+        template: `<div>{{ text }}</div>`
+        En el caso de los templates se pueden utilizar directivas, que son
+        atributos que recibe el HTML de un template generalmente llamadas
+        v-<declarativa> a las cuales se les puede asignar un valor de data:
+        En este caso podemos utilizar v-text para asignarle el texto que
+        contendrá el componente o v-html para cambiar el innerHTML y v-once
+        para indicar que se renderizará de forma estática (no reaccionará a
+        los cambios en sus atributos o variables que maneje)
+        template: `<div v-once v-html="text"></div>`
+        También está la directiva v-bind que nos permite transformar los
+        atributos nativos de un componente en directivas y poder asignarles
+        los valores de variables si es que no queremos agregar las llaves
+        dobles. Esto se puede acortar a ':' o incluso se puede utilizar
+        v-bind como una directiva que obtiene un JSON con los atributos a
+        ligar y su valor
+        template: `<img v-bind:src="img" v-bind:alt="img">`
+        template: `<img :src="img" :alt="img">`
+        template: `<img v-bind:[attr]="img" v-bind:[alt]="img">`
+        Además de v-bind para ligar variables reactivas, también se tiene v-on
+        que funciona como los event listeners de JavaScript Vanilla pero
+        manejando los métodos y variables reactivas de Vue. Este v-on se puede
+        acortar con @
+        template: `<button v-on:click="increment">{{ counter }}</button>`
+        template: `
+          <form v-on:submit.prevent="submit">
+            <button>{{ counter }}</button>
+          </form>` */
+      template: `
+        <button v-on:click="decrement">-</button>&nbsp;
+        <span v-text="counter"></span>&nbsp;
+        <button v-on:click="increment">+</button>`
     }).mount("#app");
 
   </script>
