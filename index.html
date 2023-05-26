@@ -29,23 +29,26 @@
       // información que utilizaremos en nuestra aplicación
       data() {
         return {
-          // text: "<span>Hola Vue</span>"
+          text: "Hola Vue"
           // attr: 'src',
           // alt: 'alt',
           // img: 'https://picsum.photos/500/800',
-          counter: 0
+          // counter: 0
         };
       },
       /* Vue no puede recibir en sus directivas funciones que nosotros
         declaramos en nuestro código de JavaScript, pero lo que si puede
         hacer es ejecutar métodos que declaramos dentro del atributo methods */
       methods: {
-        increment() {
+        /* increment() {
           this.counter++;
         },
         decrement() {
           this.counter--;
-        },
+        }, */
+        /* input(e) {
+          this.text = e.target.value;
+        } */
         /* submit(e) {
           // e.preventDefault();
           this.counter++;
@@ -79,13 +82,28 @@
         template: `
           <form v-on:submit.prevent="submit">
             <button>{{ counter }}</button>
-          </form>` */
-      template: `
-        <button v-on:click="decrement">-</button>&nbsp;
-        <span v-text="counter"></span>&nbsp;
-        <button v-on:click="increment">+</button>`
+          </form>`
+        template: `
+          <button v-on:click="decrement">-</button>&nbsp;
+          <span v-text="counter"></span>&nbsp;
+          <button v-on:click="increment">+</button>` */
+        /* Aparte de todo esto, Vue viene con eventos nativos que nos permiten
+          evitarnos código boilerplate como el evento input que nos permite
+          ejecutar métodos con cada cambio del elemento en tiempo real  */
+        /* template: `
+          <p>{{ text }}</p>
+          <input type="text" @input="input" :value="text">
+        ` */
+        /* Este caso se puede acortar aún más con la directiva v-model, la cual
+          combina las directivas v-on:input y v-bind:value para que el input,
+          textarea o select sean completamente reactivos manejando tanto el
+          state como el input del patrón MVVM/Two-way data binding */
+        template: `
+          <p>{{ text }}</p>
+          <input type="text" v-model="text">
+        `
     }).mount("#app");
-
   </script>
+
 </body>
 </html>
