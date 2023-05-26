@@ -15,7 +15,7 @@
   <div id="app">
     <!-- En este elemento podemos agregar información que viene desde Vue con
       las llaves dobles -->
-    {{ text }}
+    <!-- {{ text }} -->
   </div>
   <script>
     // Instanciamos una app de Vue con el método createApp en una constante que
@@ -28,9 +28,20 @@
       // información que utilizaremos en nuestra aplicación
       data() {
         return {
-          text: "Hola Vue"
+          text: "<span>Hola Vue</span>"
         };
-      }
+      },
+      // También se pueden crear templates para crear los componentes de forma
+      // declarativa
+      // template: `<div>{{ text }}</div>`
+      // En el caso de los templates se pueden utilizar directivas, que son
+      // atributos que recibe el HTML de un template generalmente llamadas
+      // v-<declarativa> a las cuales se les puede asignar un valor de data:
+      // En este caso podemos utilizar v-text para asignarle el texto que
+      // contendrá el componente o v-html para cambiar el innerHTML y v-once
+      // para indicar que se renderizará de forma estática (no reaccionará a
+      // los cambios en sus atributos o variables que maneje)
+      template: `<div v-once v-html="text"></div>`
     }).mount("#app");
 
   </script>
