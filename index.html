@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hola Vue</title>
+</head>
+<body>
+  <!-- Enlace de CDN para importar Vue -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <!-- Para inicializar una instancia de Vue generalmente se utiliza un
+    elemento con el id 'app' -->
+  <div id="app">
+    <!-- En este elemento podemos agregar información que viene desde Vue con
+      las llaves dobles -->
+    {{ text }}
+  </div>
+  <script>
+    // Instanciamos una app de Vue con el método createApp en una constante que
+    // por nomenclatura se llamará vm. Este método recibe un objeto llamado
+    // Config API con los elementos y las funciones a ejecutar en la app y
+    // aparte se ejecuta el método mount en el elemento 'app' que creamos con
+    // HTML
+    const vm = Vue.createApp({
+      // En este objeto definimos la función data que retornará los la
+      // información que utilizaremos en nuestra aplicación
+      data() {
+        return {
+          text: "Hola Vue"
+        };
+      }
+    }).mount("#app");
+
+  </script>
+</body>
+</html>
