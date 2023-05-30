@@ -5,6 +5,34 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hola Vue</title>
+  <style>
+    html, body {
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    #app, .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+    }
+    button {
+      margin-top: 24px;
+      border: none;
+      background-color: white;
+      padding: 8px 24px;
+      border-radius: 12px;
+    }
+    .closed {
+      background-color: #eca1a6;
+    }
+    .opened {
+      background-color: #b5e7a0;
+    }
+  </style>
 </head>
 <body>
   <!-- Enlace de CDN para importar Vue -->
@@ -34,10 +62,14 @@
           // alt: 'alt',
           // img: 'https://picsum.photos/500/800',
           // counter: 0,
-          firstName: 'Marco',
-          lastName: 'Hernández',
-          now: new Date(),
+          // firstName: 'Marco',
+          // lastName: 'Hernández',
+          // now: new Date(),
           opened: false,
+          /* Podemos almacenar estilos dentro de una variable en data manejando el CSS como un objeto, cambiando la nomenclatura de kebab-case a camelCase
+          styles: {
+            backgroundColor: '#eca1a6'
+          } */
         };
       },
       /* Vue no puede recibir en sus directivas funciones que nosotros
@@ -67,14 +99,17 @@
         de data de una forma diferente que sea más facil tanto de escribir para
         el programador como de leer para el usuario */
       computed: {
-        fullName() {
+        /* fullName() {
           return `${this.firstName} ${this.lastName}`;
         },
         today() {
           return this.now.toLocaleDateString();
-        },
+        }, */
         openDoorText() {
           return !this.opened ? 'Abrir' : 'Cerrar';
+        },
+        styles() {
+          return this.opened ? 'opened' : 'closed';
         }
       },
       /* Vue permite agregar observadores que pueden reaccionar a los cambios
@@ -90,8 +125,14 @@
           this.asdf();
         },
         opened(newValue) {
-          if ( newValue ) { this.text = 'Puerta abierta'; }
-          else { this.text = 'Puerta cerrada'; }
+          if ( newValue ) {
+            this.text = 'Puerta abierta';
+            // this.styles.backgroundColor = '#b5e7a0';
+          }
+          else {
+            this.text = 'Puerta cerrada';
+            // this.styles.backgroundColor = '#eca1a6';
+          }
         }
       },
       /* También se pueden crear templates para crear los componentes de forma
@@ -150,12 +191,44 @@
         ` */
       /* Pero también se pueden usar métodos computed que están enfocados en
         mostrar de diferente forma la información almacenada (como los filtros
-        de los templates en django) */
+        de los templates en django)
+        template: `
+          <div>{{ fullName }}</div>
+          <div>{{ today }}</div>
+        ` */
+      /* Además de tener reactividad en los datos, también podemos tener
+        reactividad en los estilos, lo cual se consigue creando una variable en
+        data que contendrá los estilos en forma de objeto y agregandola a un
+        elemento con v-bind:style o manejando clases con v-bind:class en donde
+        tendremos la opción de agregar un array de las clases que tendrá o un
+        objeto con el nombre de cada una de las clases y un booleano o una
+        expresión para indicar si estará activa con true, desactivada con
+        false, comparando con una variable o con una expresión, por ejemplo:
+        n>1 para true y n<=0 para false, o incluso con un método computado que
+        retorne una o más clases
+        template: `
+          <div class="container" :style="styles">
+            <h3>{{ text }}</h3>
+            <button @click="opened = !opened">{{ openDoorText }}</button>
+          </div>
+        `
+        template: `
+          <div class="container" :class="['opened']">
+            <h3>{{ text }}</h3>
+            <button @click="opened = !opened">{{ openDoorText }}</button>
+          </div>
+        `
+        template: `
+          <div class="container" :class="{ 'opened': opened, 'closed': !opened }">
+            <h3>{{ text }}</h3>
+            <button @click="opened = !opened">{{ openDoorText }}</button>
+          </div>
+        ` */
       template: `
-        <div>{{ fullName }}</div>
-        <div>{{ today }}</div>
-        <div>{{ text }}</div>
-        <button @click="opened = !opened">{{ openDoorText }}</button>
+        <div class="container" :class="styles">
+          <h3>{{ text }}</h3>
+          <button @click="opened = !opened">{{ openDoorText }}</button>
+        </div>
       `
     }).mount("#app");
   </script>
