@@ -29,11 +29,15 @@
       // información que utilizaremos en nuestra aplicación
       data() {
         return {
-          text: "Hola Vue"
+          text: "Puerta cerrada",
           // attr: 'src',
           // alt: 'alt',
           // img: 'https://picsum.photos/500/800',
-          // counter: 0
+          // counter: 0,
+          firstName: 'Marco',
+          lastName: 'Hernández',
+          now: new Date(),
+          opened: false,
         };
       },
       /* Vue no puede recibir en sus directivas funciones que nosotros
@@ -53,6 +57,42 @@
           // e.preventDefault();
           this.counter++;
         } */
+        asdf() {
+          console.log('sdafsdfafdf')
+        }
+      },
+      /* El atributo computed también guarda métodos, pero la diferencia es que
+        los métodos de computed están enfocados a la vista para aplicar
+        filtros, formateos o simplemente mostrar la información de las varibles
+        de data de una forma diferente que sea más facil tanto de escribir para
+        el programador como de leer para el usuario */
+      computed: {
+        fullName() {
+          return `${this.firstName} ${this.lastName}`;
+        },
+        today() {
+          return this.now.toLocaleDateString();
+        },
+        openDoorText() {
+          return !this.opened ? 'Abrir' : 'Cerrar';
+        }
+      },
+      /* Vue permite agregar observadores que pueden reaccionar a los cambios
+        reactivos que tienen las variables en data, esto se puede configurar
+        con la propiedad watch. En esta propiedad se deberán crear funciones
+        con el nombre de las variables que queremos observar y dos argumentos
+        opcionales: el nuevo valor y el anterior.
+        IMPORTANTE: No funciona dentro de los templates (como los computed) y
+        no retorna valores */
+      watch: {
+        text(newValue, oldValue) {
+          console.log('El texto cambió de', oldValue, 'a:', newValue);
+          this.asdf();
+        },
+        opened(newValue) {
+          if ( newValue ) { this.text = 'Puerta abierta'; }
+          else { this.text = 'Puerta cerrada'; }
+        }
       },
       /* También se pueden crear templates para crear los componentes de forma
         declarativa:
@@ -87,23 +127,37 @@
           <button v-on:click="decrement">-</button>&nbsp;
           <span v-text="counter"></span>&nbsp;
           <button v-on:click="increment">+</button>` */
-        /* Aparte de todo esto, Vue viene con eventos nativos que nos permiten
-          evitarnos código boilerplate como el evento input que nos permite
-          ejecutar métodos con cada cambio del elemento en tiempo real  */
-        /* template: `
-          <p>{{ text }}</p>
-          <input type="text" @input="input" :value="text">
-        ` */
-        /* Este caso se puede acortar aún más con la directiva v-model, la cual
-          combina las directivas v-on:input y v-bind:value para que el input,
-          textarea o select sean completamente reactivos manejando tanto el
-          state como el input del patrón MVVM/Two-way data binding */
+      /* Aparte de todo esto, Vue viene con eventos nativos que nos permiten
+        evitarnos código boilerplate como el evento input que nos permite
+        ejecutar métodos con cada cambio del elemento en tiempo real  */
+      /* template: `
+        <p>{{ text }}</p>
+        <input type="text" @input="input" :value="text">
+      ` */
+      /* Este caso se puede acortar aún más con la directiva v-model, la cual
+        combina las directivas v-on:input y v-bind:value para que el input,
+        textarea o select sean completamente reactivos manejando tanto el
+        state como el input del patrón MVVM/Two-way data binding
         template: `
           <p>{{ text }}</p>
           <input type="text" v-model="text">
-        `
+        ` */
+      /* Al momento de mostrar datos al usuario tenemos la opción de utilizar
+        métodos de JS o concatenar strings manualmente en el template:
+        template: `
+          <div>{{ firstName }} {{ lastName }}</div>
+          <div>{{ now.toLocaleDateString() }}</div>
+        ` */
+      /* Pero también se pueden usar métodos computed que están enfocados en
+        mostrar de diferente forma la información almacenada (como los filtros
+        de los templates en django) */
+      template: `
+        <div>{{ fullName }}</div>
+        <div>{{ today }}</div>
+        <div>{{ text }}</div>
+        <button @click="opened = !opened">{{ openDoorText }}</button>
+      `
     }).mount("#app");
   </script>
-
 </body>
 </html>
