@@ -57,7 +57,7 @@
       // información que utilizaremos en nuestra aplicación
       data() {
         return {
-          text: "Puerta cerrada",
+          text: "Accede a tu cuenta",
           // attr: 'src',
           // alt: 'alt',
           // img: 'https://picsum.photos/500/800',
@@ -65,11 +65,13 @@
           // firstName: 'Marco',
           // lastName: 'Hernández',
           // now: new Date(),
-          opened: false,
+          // opened: false,
           /* Podemos almacenar estilos dentro de una variable en data manejando el CSS como un objeto, cambiando la nomenclatura de kebab-case a camelCase
           styles: {
             backgroundColor: '#eca1a6'
           } */
+          logged: false,
+          username: '',
         };
       },
       /* Vue no puede recibir en sus directivas funciones que nosotros
@@ -89,9 +91,9 @@
           // e.preventDefault();
           this.counter++;
         } */
-        asdf() {
+        /* asdf() {
           console.log('sdafsdfafdf')
-        }
+        } */
       },
       /* El atributo computed también guarda métodos, pero la diferencia es que
         los métodos de computed están enfocados a la vista para aplicar
@@ -105,11 +107,17 @@
         today() {
           return this.now.toLocaleDateString();
         }, */
-        openDoorText() {
+        /* openDoorText() {
           return !this.opened ? 'Abrir' : 'Cerrar';
         },
         styles() {
           return this.opened ? 'opened' : 'closed';
+        }, */
+        styles() {
+          return this.logged ? 'opened' : 'closed';
+        },
+        loginText() {
+          return !this.logged ? 'Acceder' : 'Salir';
         }
       },
       /* Vue permite agregar observadores que pueden reaccionar a los cambios
@@ -120,17 +128,27 @@
         IMPORTANTE: No funciona dentro de los templates (como los computed) y
         no retorna valores */
       watch: {
-        text(newValue, oldValue) {
+        /* text(newValue, oldValue) {
           console.log('El texto cambió de', oldValue, 'a:', newValue);
           this.asdf();
-        },
-        opened(newValue) {
+        }, */
+        /* opened(newValue) {
           if ( newValue ) {
             this.text = 'Puerta abierta';
             // this.styles.backgroundColor = '#b5e7a0';
           }
           else {
             this.text = 'Puerta cerrada';
+            // this.styles.backgroundColor = '#eca1a6';
+          }
+        } */
+        logged(newValue) {
+          if ( newValue ) {
+            this.text = 'Cierra sesión';
+            // this.styles.backgroundColor = '#b5e7a0';
+          }
+          else {
+            this.text = 'Accede a tu cuenta';
             // this.styles.backgroundColor = '#eca1a6';
           }
         }
@@ -223,11 +241,32 @@
             <h3>{{ text }}</h3>
             <button @click="opened = !opened">{{ openDoorText }}</button>
           </div>
+        `
+        template: `
+          <div class="container" :class="styles">
+            <h3>{{ text }}</h3>
+            <button @click="opened = !opened">{{ openDoorText }}</button>
+          </div>
         ` */
+      /* Vue también soporta control de flujo dentro de su sintáxis
+        directamente en los templates, lo cual nos permite tomar decisiones
+        o renderizar sólo los elementos necesarios haciendo uso de sus
+        directivas. Por ejemplo, se tiene las directivas v-if y v-else para
+        crear condicionales */
       template: `
         <div class="container" :class="styles">
           <h3>{{ text }}</h3>
-          <button @click="opened = !opened">{{ openDoorText }}</button>
+          <div v-if="logged">
+            <p>Hola, {{ username }}</p>
+          </div>
+          <div v-else>
+            <label>Username&nbsp;</label>
+            <input type="text" v-model="username">
+          </div>
+          <button @click="logged = !logged">
+            <div v-if="!logged">Acceder</div>
+            <div v-else>Salir</div>
+          </button>
         </div>
       `
     }).mount("#app");
