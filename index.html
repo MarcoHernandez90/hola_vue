@@ -25,12 +25,58 @@
       background-color: white;
       padding: 8px 24px;
       border-radius: 12px;
+      cursor: pointer;
     }
     .closed {
       background-color: #eca1a6;
     }
     .opened {
       background-color: #b5e7a0;
+    }
+    .list {
+      display: flex;
+      flex-direction: column;
+    }
+    .item {
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 5px;
+      margin-top: 5px;
+      position: relative;
+    }
+    .title {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+    .btn-add {
+      display: block;
+      background-color: #2AABFF;
+      margin: auto;
+    }
+    .post-form {
+      padding: 5px;
+      border: 3px solid #2AABFF;
+      border-radius: 5px;
+      margin-bottom: 5px;
+
+      > div {
+        margin: 3px 0;
+      }
+
+      > input, textarea {
+        border: 1px solid #aaa;
+        border-radius: 3px;
+      }
+    }
+    .btn-delete {
+      position: absolute;
+      top: 4px;
+      right: 10px;
+      padding: 1px;
+      margin: 0;
+      background-color: transparent;
+      font-size: 1em;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -72,6 +118,17 @@
           } */
           logged: false,
           username: '',
+          posts: [{
+            'title': 'Título de ejemplo',
+            'description': 'Lorem ipsum'
+          },{
+            'title': 'Título de ejemplo 2',
+            'description': 'Lorem ipsum'
+          },{
+            'title': 'Título de ejemplo 3',
+            'description': 'Lorem ipsum'
+          }],
+          newPost: { 'title': '', 'description': '' },
         };
       },
       /* Vue no puede recibir en sus directivas funciones que nosotros
@@ -94,6 +151,14 @@
         /* asdf() {
           console.log('sdafsdfafdf')
         } */
+        addPost() {
+          this.posts.push({...this.newPost});
+          this.newPost.title = '';
+          this.newPost.description = '';
+        },
+        deletePost(index) {
+          this.posts.splice(index, 1);
+        },
       },
       /* El atributo computed también guarda métodos, pero la diferencia es que
         los métodos de computed están enfocados a la vista para aplicar
@@ -252,15 +317,31 @@
         directamente en los templates, lo cual nos permite tomar decisiones
         o renderizar sólo los elementos necesarios haciendo uso de sus
         directivas. Por ejemplo, se tiene las directivas v-if y v-else para
-        crear condicionales */
+        crear condicionales y v-for para renderizar elementos con ciclos (a
+        estos elementos les podemos asignar el atributo key como un
+        identificador) */
       template: `
         <div class="container" :class="styles">
           <h3>{{ text }}</h3>
           <div v-if="logged">
             <p>Hola, {{ username }}</p>
+            <div class="post-form">
+              <div>Título del post:</div>
+              <input v-model="newPost.title" type="text">
+              <div>Descripción:</div>
+              <textarea v-model="newPost.description" name="description" cols="30" rows="4"></textarea>
+              <button type="button" class="btn-add" @click="addPost">Agregar post</button>
+            </div>
+            <div class="list">
+              <div v-for="(post, index) in posts" :key="index" class="item">
+                <button type="button" @click="deletePost(index)" class="btn-delete">X</button>
+                <div class="title">{{ post.title }}</div>
+                <p>{{ post.description }}</p>
+              </div>
+            </div>
           </div>
           <div v-else>
-            <label>Username&nbsp;</label>
+            <div>Username</div>
             <input type="text" v-model="username">
           </div>
           <button @click="logged = !logged">
