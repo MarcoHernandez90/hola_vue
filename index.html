@@ -50,12 +50,13 @@
     }
     .btn-add {
       display: block;
-      background-color: #2AABFF;
+      background-color: #754f92;
+      color: #fff;
       margin: auto;
     }
     .post-form {
       padding: 5px;
-      border: 3px solid #2AABFF;
+      background-color: #52b69a;
       border-radius: 5px;
       margin-bottom: 5px;
 
@@ -90,15 +91,15 @@
     <!-- En este elemento podemos agregar información que viene desde Vue con
       las llaves dobles -->
     <!-- {{ text }} -->
-    
   </div>
   <script>
-    // Instanciamos una app de Vue con el método createApp en una constante que
-    // por nomenclatura se llamará vm. Este método recibe un objeto llamado
-    // Config API con los elementos y las funciones a ejecutar en la app y
-    // aparte se ejecuta el método mount en el elemento 'app' que creamos con
-    // HTML
-    const vm = Vue.createApp({
+    /* Instanciamos una app de Vue con el método createApp en una constante que
+      por nomenclatura se llamará app y después la montaremos con su método
+      mount en una constante llamada vm que representa el ViewModel de Vue.
+      Este método recibe un objeto llamado Config API con los elementos y las
+      funciones a ejecutar en la app y aparte se ejecuta el método mount en el
+      elemento 'app' que creamos con HTML */
+    const app = Vue.createApp({
       // En este objeto definimos la función data que retornará los la
       // información que utilizaremos en nuestra aplicación
       data() {
@@ -151,7 +152,7 @@
         /* asdf() {
           console.log('sdafsdfafdf')
         } */
-        addPost() {
+        addPost(newPost) {
           this.posts.push({...this.newPost});
           this.newPost.title = '';
           this.newPost.description = '';
@@ -319,7 +320,40 @@
         directivas. Por ejemplo, se tiene las directivas v-if y v-else para
         crear condicionales y v-for para renderizar elementos con ciclos (a
         estos elementos les podemos asignar el atributo key como un
-        identificador) */
+        identificador)
+        template: `
+          <div class="container" :class="styles">
+            <h3>{{ text }}</h3>
+            <div v-if="logged">
+              <p>Hola, {{ username }}</p>
+              <div class="post-form">
+                <div>Título del post:</div>
+                <input v-model="newPost.title" type="text">
+                <div>Descripción:</div>
+                <textarea v-model="newPost.description" name="description" cols="30" rows="4"></textarea>
+                <button type="button" class="btn-add" @click="addPost">Agregar post</button>
+              </div>
+              <div class="list">
+                <div v-for="(post, index) in posts" :key="index" class="item">
+                  <button type="button" @click="deletePost(index)" class="btn-delete">X</button>
+                  <div class="title">{{ post.title }}</div>
+                  <p>{{ post.description }}</p>
+                </div>
+              </div>
+            </div>
+            <div v-else>
+              <div>Username</div>
+              <input type="text" v-model="username">
+            </div>
+            <button @click="logged = !logged">
+              <div v-if="!logged">Acceder</div>
+              <div v-else>Salir</div>
+            </button>
+          </div>
+        ` */
+      /* Para agregar un componente hijo a nuestra app o componente padre,
+        lo podemos hacer a través de un tag con el nombre del componente y las
+        directivas o props que necesite nuestro componente para funcionar */
       template: `
         <div class="container" :class="styles">
           <h3>{{ text }}</h3>
@@ -333,24 +367,44 @@
               <button type="button" class="btn-add" @click="addPost">Agregar post</button>
             </div>
             <div class="list">
-              <div v-for="(post, index) in posts" :key="index" class="item">
-                <button type="button" @click="deletePost(index)" class="btn-delete">X</button>
-                <div class="title">{{ post.title }}</div>
-                <p>{{ post.description }}</p>
-              </div>
+              <Item v-for="(post, index) in posts" :key="index" :post="post" :index="index" :deletePost="deletePost" />
             </div>
           </div>
-          <div v-else>
-            <div>Username</div>
-            <input type="text" v-model="username">
-          </div>
+          <LoginForm v-else :username="username" v-model:username="username" />
           <button @click="logged = !logged">
             <div v-if="!logged">Acceder</div>
             <div v-else>Salir</div>
           </button>
         </div>
       `
-    }).mount("#app");
+    });
+
+    /* Para crear componentes dentro de una app de Vue, se puede utilizar el
+      método component que recibe como parámetro el nombre del componente y un
+      objeto JSON con las opciones de la app (data, methods, template, etc.) y
+      una extra llamada props que servirá como una lista de las variables que
+      podrá recibir el componente actual desde el componente padre para
+      trabajar */
+    app.component('Item', {
+      props: ["post", "index", "deletePost"],
+      template: `
+        <div class="item">
+          <button type="button" @click="deletePost(index)" class="btn-delete">X</button>
+          <div class="title">{{ post.title }}</div>
+          <p>{{ post.description }}</p>
+        </div>
+      `
+    });
+    app.component('LoginForm', {
+      props: ['username'],
+      emits: ['update:username'],
+      template: `
+        <div>Username</div>
+        <input type="text" :value="username" @input="$emit('update:username', $event.target.value)">
+      `
+    });
+
+    const vm = app.mount("#app");
   </script>
 </body>
 </html>
