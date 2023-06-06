@@ -153,9 +153,9 @@
           console.log('sdafsdfafdf')
         } */
         addPost(newPost) {
-          this.posts.push({...this.newPost});
-          this.newPost.title = '';
-          this.newPost.description = '';
+          this.posts.push({...newPost});
+          newPost.title = '';
+          newPost.description = '';
         },
         deletePost(index) {
           this.posts.splice(index, 1);
@@ -359,22 +359,13 @@
           <h3>{{ text }}</h3>
           <div v-if="logged">
             <p>Hola, {{ username }}</p>
-            <div class="post-form">
-              <div>Título del post:</div>
-              <input v-model="newPost.title" type="text">
-              <div>Descripción:</div>
-              <textarea v-model="newPost.description" name="description" cols="30" rows="4"></textarea>
-              <button type="button" class="btn-add" @click="addPost">Agregar post</button>
-            </div>
+            <PostForm @addPost="newPost => addPost(newPost)" />
             <div class="list">
               <Item v-for="(post, index) in posts" :key="index" :post="post" :index="index" :deletePost="deletePost" />
             </div>
           </div>
           <LoginForm v-else :username="username" v-model:username="username" />
-          <button @click="logged = !logged">
-            <div v-if="!logged">Acceder</div>
-            <div v-else>Salir</div>
-          </button>
+          <LoginButton :logged="logged" @click="logged = !logged" />
         </div>
       `
     });
@@ -401,6 +392,34 @@
       template: `
         <div>Username</div>
         <input type="text" :value="username" @input="$emit('update:username', $event.target.value)">
+      `
+    });
+    app.component('PostForm', {
+      data() {
+        return {
+          newPost: {
+            title: '',
+            description: ''
+          }
+        }
+      },
+      template: `
+        <div class="post-form">
+          <div>Título del post:</div>
+          <input v-model="newPost.title" type="text">
+          <div>Descripción:</div>
+          <textarea v-model="newPost.description" name="description" cols="30" rows="4"></textarea>
+          <button type="button" class="btn-add" @click="$emit('addPost', newPost)">Agregar post</button>
+        </div>
+      `
+    });
+    app.component('LoginButton', {
+      props: ['logged'],
+      template: `
+        <button>
+          <div v-if="!logged">Acceder</div>
+          <div v-else>Salir</div>
+        </button>
       `
     });
 
