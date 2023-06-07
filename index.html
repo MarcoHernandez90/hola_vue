@@ -83,7 +83,7 @@
 </head>
 <body>
   <!-- Enlace de CDN para importar Vue -->
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
 
   <!-- Para inicializar una instancia de Vue generalmente se utiliza un
     elemento con el id 'app' -->
@@ -92,7 +92,8 @@
       las llaves dobles -->
     <!-- {{ text }} -->
   </div>
-  <script>
+  <script type="module" src="/src/main.js">
+    import { createApp, computed } from 'vue';
     /* Instanciamos una app de Vue con el método createApp en una constante que
       por nomenclatura se llamará app y después la montaremos con su método
       mount en una constante llamada vm que representa el ViewModel de Vue.
@@ -586,7 +587,7 @@
       esta información, se debe definir provide como una función y el valor de
       las variables a proveer con el método computed de la clase Vue. */
 
-    const app = Vue.createApp({
+    const app = createApp({
       data() {
         return {
           text: 'Hola Vue'
@@ -594,7 +595,7 @@
       },
       provide() {
         return {
-          otroTexto: Vue.computed(() => this.text)
+          otroTexto: computed(() => this.text)
         };
       },
       template: `
@@ -619,7 +620,16 @@
     });
 
     const vm = app.mount("#app");
+
+    /* Las apps de Vue simplemente son objetos creados con esta librería y, en
+      cualquier momento, podemos acceder a sus propiedades y métodos desde JS
+      como con cualquier otro objeto que creemos. Esto se puede lograr con una
+      lista de atributos que nos da Vue para un mejor manejo de las instancias
+      de los componentes. Por ejemplo, con $root podemos acceder al componente raíz */
+    console.log(vm.$root);
+
   </script>
+  <script type="module" src="/src/Hola.vue"></script>
   
 </body>
 </html>
