@@ -99,10 +99,10 @@
       Este método recibe un objeto llamado Config API con los elementos y las
       funciones a ejecutar en la app y aparte se ejecuta el método mount en el
       elemento 'app' que creamos con HTML */
-    const app = Vue.createApp({
+    /* const app = Vue.createApp({ */
       // En este objeto definimos la función data que retornará los la
       // información que utilizaremos en nuestra aplicación
-      data() {
+      /* data() {
         return {
           text: "Accede a tu cuenta",
           // attr: 'src',
@@ -113,10 +113,10 @@
           // lastName: 'Hernández',
           // now: new Date(),
           // opened: false,
-          /* Podemos almacenar estilos dentro de una variable en data manejando el CSS como un objeto, cambiando la nomenclatura de kebab-case a camelCase
+          Podemos almacenar estilos dentro de una variable en data manejando el CSS como un objeto, cambiando la nomenclatura de kebab-case a camelCase
           styles: {
             backgroundColor: '#eca1a6'
-          } */
+          }
           logged: false,
           username: '',
           posts: [{
@@ -131,27 +131,27 @@
           }],
           newPost: { 'title': '', 'description': '' },
         };
-      },
+      }, */
       /* Vue no puede recibir en sus directivas funciones que nosotros
         declaramos en nuestro código de JavaScript, pero lo que si puede
         hacer es ejecutar métodos que declaramos dentro del atributo methods */
-      methods: {
-        /* increment() {
+      /* methods: {
+        increment() {
           this.counter++;
         },
         decrement() {
           this.counter--;
-        }, */
-        /* input(e) {
+        },
+        input(e) {
           this.text = e.target.value;
-        } */
-        /* submit(e) {
+        }
+        submit(e) {
           // e.preventDefault();
           this.counter++;
-        } */
-        /* asdf() {
+        }
+        asdf() {
           console.log('sdafsdfafdf')
-        } */
+        }
         addPost(newPost) {
           this.posts.push({...newPost});
           newPost.title = '';
@@ -160,32 +160,32 @@
         deletePost(index) {
           this.posts.splice(index, 1);
         },
-      },
+      }, */
       /* El atributo computed también guarda métodos, pero la diferencia es que
         los métodos de computed están enfocados a la vista para aplicar
         filtros, formateos o simplemente mostrar la información de las varibles
         de data de una forma diferente que sea más facil tanto de escribir para
         el programador como de leer para el usuario */
-      computed: {
-        /* fullName() {
+      /* computed: {
+        fullName() {
           return `${this.firstName} ${this.lastName}`;
         },
         today() {
           return this.now.toLocaleDateString();
-        }, */
-        /* openDoorText() {
+        },
+        openDoorText() {
           return !this.opened ? 'Abrir' : 'Cerrar';
         },
         styles() {
           return this.opened ? 'opened' : 'closed';
-        }, */
+        },
         styles() {
           return this.logged ? 'opened' : 'closed';
         },
         loginText() {
           return !this.logged ? 'Acceder' : 'Salir';
         }
-      },
+      }, */
       /* Vue permite agregar observadores que pueden reaccionar a los cambios
         reactivos que tienen las variables en data, esto se puede configurar
         con la propiedad watch. En esta propiedad se deberán crear funciones
@@ -193,12 +193,12 @@
         opcionales: el nuevo valor y el anterior.
         IMPORTANTE: No funciona dentro de los templates (como los computed) y
         no retorna valores */
-      watch: {
+      /* watch: {
         /* text(newValue, oldValue) {
           console.log('El texto cambió de', oldValue, 'a:', newValue);
           this.asdf();
-        }, */
-        /* opened(newValue) {
+        },
+        opened(newValue) {
           if ( newValue ) {
             this.text = 'Puerta abierta';
             // this.styles.backgroundColor = '#b5e7a0';
@@ -207,7 +207,7 @@
             this.text = 'Puerta cerrada';
             // this.styles.backgroundColor = '#eca1a6';
           }
-        } */
+        }
         logged(newValue) {
           if ( newValue ) {
             this.text = 'Cierra sesión';
@@ -218,7 +218,7 @@
             // this.styles.backgroundColor = '#eca1a6';
           }
         }
-      },
+      }, */
       /* También se pueden crear templates para crear los componentes de forma
         declarativa:
         template: `<div>{{ text }}</div>`
@@ -354,7 +354,7 @@
       /* Para agregar un componente hijo a nuestra app o componente padre,
         lo podemos hacer a través de un tag con el nombre del componente y las
         directivas o props que necesite nuestro componente para funcionar */
-      template: `
+      /* template: `
         <div class="container" :class="styles">
           <h3>{{ text }}</h3>
           <div v-if="logged">
@@ -367,8 +367,8 @@
           <LoginForm v-else :username="username" v-model:username="username" />
           <LoginButton :logged="logged" @click="logged = !logged" />
         </div>
-      `
-    });
+      ` */
+    /* }); */
 
     /* Para crear componentes dentro de una app de Vue, se puede utilizar el
       método component que recibe como parámetro el nombre del componente y un
@@ -376,7 +376,7 @@
       una extra llamada props que servirá como una lista de las variables que
       podrá recibir el componente actual desde el componente padre para
       trabajar */
-    app.component('Item', {
+    /* app.component('Item', {
       props: ["post", "index", "deletePost"],
       template: `
         <div class="item">
@@ -421,9 +421,205 @@
           <div v-else>Salir</div>
         </button>
       `
+    }); */
+
+    /* Dentro de un template de Vue podemos utilizar tags que esta librería nos
+      provee, como por ejemplo el slot, el cual sirve para crear componentes
+      "contenedores" que puedan tener un contenido dinámico proporcionado por
+      el componente padre dependiendo de en que parte de nuestra aplicación lo
+      vayamos a utilizar */
+    /* const app = Vue.createApp({
+      template: `
+        <div>
+          <v-header>
+            <button>Título</button>
+          </v-header>
+          <div>Lorem ipsum</div>
+        </div>
+      `
+    });
+
+    app.component("v-header", {
+      template: `
+        <header>
+          <slot></slot>
+        </header>
+      `
+    }); */
+
+    /* Estos slots se pueden usar múltiples veces dentro de un componente
+      asignándoles un nombre y utilizando otro tag de Vue llamado template para
+      indicar a que slot se le asignará un contenido haciendo uso de la
+      directiva v-slot:<nombre del slot> */
+    /* const app = Vue.createApp({
+      template: `
+        <v-layout>
+          <template v-slot:header>
+            <button>Título</button>
+          </template>
+          <template v-slot:content>
+            Lorem ipsum dolor sit amet.
+          </template>
+        </v-layout>
+      `
+    });
+
+    app.component('v-layout', {
+      template: `
+        <header>
+          <slot name="header"></slot>
+        </header>
+        <div>
+          <slot name="content"></slot>
+        </div>
+      `
+    }); */
+
+    /* Al momento de utilizar el atributo props dentro de un componente hijo,
+      podemos tratarlo como objeto en lugar de lista para darle opciones o
+      atributos a estas propiedades y configurar su comportamiento como, por
+      ejemplo, dándole un valor por default */
+    /* const app = Vue.createApp({
+      data() {
+        return {
+          items: ['uno', 'dos', 'tres']
+        }
+      },
+      methods: {
+        removeItem(index) {
+          this.items.splice(index, 1);
+        }
+      },
+      template: `
+        <ul>
+          <v-item v-for="(item, index) in items" v-bind:text="item" @click="removeItem(index)" />
+        </ul>
+      `
+    });
+
+    app.component('v-item', {
+      props: {
+        text: {
+          type: String,
+          // default: "Texto"
+        }
+      },
+      template: `
+        <li>{{ text }}</li>
+      `
+    }); */
+
+    /* Esto es para comunicar al componente padre con el hijo, pero si se
+      quiere comunicar al hijo con el padre, se deben utilizar otros métodos
+      para no interferir en las operaciones y el manejo de datos de el
+      componente padre. Una forma es utilizando los emit, que son emisores de
+      eventos que el componente padre observa y reacciona a su manera a estos
+      eventos */
+    /* const app = Vue.createApp({
+      data() {
+        return {
+          items: ['uno', 'dos', 'tres']
+        }
+      },
+      methods: {
+        removeItem(index) {
+          this.items.splice(index, 1);
+        }
+      },
+      template: `
+        <ul>
+          <v-item v-for="(item, index) in items" v-bind:text="item" v-on:remove="removeItem(index)" />
+        </ul>
+      `
+    });
+
+    app.component('v-item', {
+      props: {
+        text: String
+      },
+      methods: {
+        remove() {
+          // Emitimos el evento remove
+          this.$emit('remove');
+        }
+      },
+      template: `<li v-on:click="remove">{{ text }}</li>`
+    }); */
+
+    /* Para utilizar la directiva v-model con los componentes se debe hacer uso
+      de los emit para emitir el evento update:<variable> en el evento input
+      del componente hijo */
+    /* const app = Vue.createApp({
+      data() {
+        return {
+          text: "Hola Vue"
+        };
+      },
+      template: `
+        <div>
+          <p>{{ text }}</p>
+          <v-input v-model:value="text" />
+        </div>
+      `
+    });
+
+    app.component('v-input', {
+      props: {
+        inputValue: String
+      },
+      methods: {
+        updateValue(event) {
+          this.$emit("update:value", event.target.value);
+        }
+      },
+      template: `
+        <input type="text" v-bind:value="inputValue" v-on:input="updateValue" />
+      `
+    }); */
+
+    /* Además de componentes padre e hijo, se tienen componentes profundos
+      (componentes 'nieto' y 'abuelo', por así decir) los cuales no pueden
+      comunicarse directamente con los métodos utilizados anteriormente. Para
+      comunicarse se deben utilizar los atributos provide en el componente raíz
+      para proveer información a los demás componentes e inject en el
+      componente profundo para leer esa información. Para darle reactividad a
+      esta información, se debe definir provide como una función y el valor de
+      las variables a proveer con el método computed de la clase Vue. */
+
+    const app = Vue.createApp({
+      data() {
+        return {
+          text: 'Hola Vue'
+        };
+      },
+      provide() {
+        return {
+          otroTexto: Vue.computed(() => this.text)
+        };
+      },
+      template: `
+        <div>{{ text }}</div>
+        <segundo />
+      `
+    });
+
+    app.component('segundo', {
+      template: `
+        <tercero />
+      `
+    });
+
+    app.component('tercero', {
+      inject: {
+        otroTexto: {
+          from: "otroTexto"
+        }
+      },
+      template: `<div>{{ otroTexto }}</div>`
     });
 
     const vm = app.mount("#app");
   </script>
+  
 </body>
 </html>
